@@ -31,7 +31,7 @@ startUrl
 -------------
 URL to start with
 ```
-"startUrl": "http://www.site-ngo.fr/"
+"startUrl": "http://www.yoursite.com/"
 ```
 
 depth
@@ -45,7 +45,7 @@ defaultHost
 -------------
 default host to complete relative link (if needed)
 ```
-"defaultHost": "www.site-ngo.fr"
+"defaultHost": "www.yoursite.com"
 ```
 
 urlFilters / allow
@@ -54,7 +54,7 @@ array of regexp to validate the url
 ```
 "urlFilters": {
     "allow": [
-        "^http://www.site-ngo.fr/"
+        "^http://www.yoursite.com/"
     ]
 }
 ```
@@ -244,7 +244,7 @@ Solr service responding [xxx:8080/xxx/]
 Depth : 1
 Links to crawl : 1
 Current memory : 1.53kb
-Current URL : http://www.site-ngo.fr/
+Current URL : http://www.yoursite.com/
 Response : content_type=text/html;charset=utf-8 / http_code=200 / parsed=0.43s
 Solr : sending doc [TYPO3|Site Internet|Blog - Agence Web Site'nGo.fr]
 Solr response : 200 OK / parsed=4ms
@@ -252,7 +252,7 @@ Solr response : 200 OK / parsed=4ms
 Depth : 0
 Links to crawl : 14
 Current memory : 1.56kb
-Current URL : http://www.site-ngo.fr/a-propos/lequipe/
+Current URL : http://www.yoursite.com/a-propos/lequipe/
 Response : content_type=text/html;charset=utf-8 / http_code=200 / parsed=0.47s
 Solr : sending doc [L'équipe - Site'nGo.fr]
 Solr response : 200 OK / parsed=4ms
@@ -260,7 +260,7 @@ Solr response : 200 OK / parsed=4ms
 Depth : 0
 Links to crawl : 13
 Current memory : 1.56kb
-Current URL : http://www.site-ngo.fr/a-propos/lequipe/yohann-cerdan/
+Current URL : http://www.yoursite.com/a-propos/lequipe/yohann-cerdan/
 Response : content_type=text/html;charset=utf-8 / http_code=200 / parsed=0.47s
 Solr : sending doc [Yohann CERDAN - Site'nGo.fr]
 Solr response : 200 OK / parsed=4ms
@@ -268,7 +268,7 @@ Solr response : 200 OK / parsed=4ms
 Depth : 0
 Links to crawl : 12
 Current memory : 1.56kb
-Current URL : http://www.site-ngo.fr/a-propos/lequipe/thomas-leroy/
+Current URL : http://www.yoursite.com/a-propos/lequipe/thomas-leroy/
 Response : content_type=text/html;charset=utf-8 / http_code=200 / parsed=0.44s
 Solr : sending doc [Thomas LEROY - Site'nGo.fr]
 Solr response : 200 OK / parsed=4ms
@@ -278,21 +278,21 @@ Solr response : 200 OK / parsed=4ms
 Links parsed
 Array
 (
-    [0] => http://www.site-ngo.fr/
-    [1] => http://www.site-ngo.fr/a-propos/lequipe/
-    [2] => http://www.site-ngo.fr/a-propos/lequipe/thomas-leroy/
-    [3] => http://www.site-ngo.fr/a-propos/lequipe/yohann-cerdan/
-    [4] => http://www.site-ngo.fr/a-propos/nos-developpements/
-    [5] => http://www.site-ngo.fr/a-propos/nos-valeurs/
-    [6] => http://www.site-ngo.fr/contact/
-    [7] => http://www.site-ngo.fr/les-actualites/article/apache-solr-sitengo-persiste-et-signe/
-    [8] => http://www.site-ngo.fr/les-actualites/article/sitengo-premiere-entreprise-francaise-psl-typo3/
-    [9] => http://www.site-ngo.fr/les-actualites/article/t3uni12-luniversite-dete-typo3-2012/
-    [10] => http://www.site-ngo.fr/nos-solutions/blog/wordpress/
-    [11] => http://www.site-ngo.fr/nos-solutions/expertise/
-    [12] => http://www.site-ngo.fr/nos-solutions/gestion-de-contenu/typo3/
-    [13] => http://www.site-ngo.fr/references/
-    [14] => http://www.site-ngo.fr/rss.xml
+    [0] => http://www.yoursite.com/
+    [1] => http://www.yoursite.com/a-propos/lequipe/
+    [2] => http://www.yoursite.com/a-propos/lequipe/thomas-leroy/
+    [3] => http://www.yoursite.com/a-propos/lequipe/yohann-cerdan/
+    [4] => http://www.yoursite.com/a-propos/nos-developpements/
+    [5] => http://www.yoursite.com/a-propos/nos-valeurs/
+    [6] => http://www.yoursite.com/contact/
+    [7] => http://www.yoursite.com/les-actualites/article/apache-solr-sitengo-persiste-et-signe/
+    [8] => http://www.yoursite.com/les-actualites/article/sitengo-premiere-entreprise-francaise-psl-typo3/
+    [9] => http://www.yoursite.com/les-actualites/article/t3uni12-luniversite-dete-typo3-2012/
+    [10] => http://www.yoursite.com/nos-solutions/blog/wordpress/
+    [11] => http://www.yoursite.com/nos-solutions/expertise/
+    [12] => http://www.yoursite.com/nos-solutions/gestion-de-contenu/typo3/
+    [13] => http://www.yoursite.com/references/
+    [14] => http://www.yoursite.com/rss.xml
 )
 ---------------------------------------------------------------------------------------------
 Parsed in 25.74s

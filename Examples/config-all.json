@@ -1,10 +1,10 @@
 {
-    "startUrl": "http://www.site-ngo.fr/",
+    "startUrl": "http://www.yoursite.com/",
     "depth": "0",
-    "defaultHost": "www.site-ngo.fr",
+    "defaultHost": "www.yoursite.com",
     "urlFilters": {
         "allow": [
-            "^http://www.site-ngo.fr/"
+            "^http://www.yoursite.com/"
         ],
         "disallow": [
             "^(file|ftp|mailto):",
