@@ -4,6 +4,13 @@ About
 This PHP script allow you to crawl and return all pages of a website.
 You can also index data from HTML to a solr core (see configuration).
 
+Requirements
+=============
+
+* PHP 5.3>
+* PHP curl installled
+* java installed (if you want to use Tika)
+
 Installation
 =============
 
