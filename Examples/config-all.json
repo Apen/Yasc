@@ -1,0 +1,132 @@
+{
+    "startUrl": "http://www.site-ngo.fr/",
+    "depth": "0",
+    "defaultHost": "www.site-ngo.fr",
+    "urlFilters": {
+        "allow": [
+            "^http://www.site-ngo.fr/"
+        ],
+        "disallow": [
+            "^(file|ftp|mailto):",
+            "\\.(gif|GIF|jpg|JPG|png|PNG|ico|ICO|css|CSS|sit|SIT|eps|EPS|wmf|WMF|zip|ZIP|ppt|PPT|mpg|MPG|xls|XLS|gz|GZ|rpm|RPM|tgz|TGZ|mov|MOV|exe|EXE|jpeg|JPEG|bmp|BMP|js|JS)$",
+            ".*tx_solr"
+        ]
+    },
+    "request": {
+        "timeout": 5,
+        "useragent": "Site-ngo Yasc parser"
+    },
+    "solr": {
+        "host": "x.x.x.x",
+        "port": "8080",
+        "path": "/x/x/",
+        "javaPath": "java",
+        "tikaPath": "Plugins/Solr/Tika/tika-app-1.4.jar",
+        "mapping": {
+            "regexp": [
+                {
+                    "solrField": "title",
+                    "pregMatch": "<title[^>]*>(.*?)</title>",
+                    "pregReplace": [
+                        {
+                            "from": "from",
+                            "to": "to"
+                        }
+                    ]
+                },
+                {
+                    "solrField": "titredeux_stringM",
+                    "pregMatchAll": "<h2[^>]*>(.*?)</h2>",
+                    "pregReplace": [
+                        {
+                            "from": "<.*?>",
+                            "to": ""
+                        },
+                        {
+                            "from": "\\s+",
+                            "to": " "
+                        }
+                    ],
+                    "implode": " ; "
+                },
+                {
+                    "solrField": "keywords",
+                    "pregMatch": "<meta name=\"keywords\" content=\"(.*?)\"",
+                    "explode": ","
+                },
+                {
+                    "solrField": "content",
+                    "pregMatch": "<!--TYPO3SEARCH_begin-->(.*?)<!--TYPO3SEARCH_end-->",
+                    "pregReplace": [
+                        {
+                            "from": "<.*?>",
+                            "to": ""
+                        },
+                        {
+                            "from": "\\s+",
+                            "to": " "
+                        }
+                    ]
+                }
+            ],
+            "static": [
+                {
+                    "solrField": "type",
+                    "solrValue": "pages"
+                },
+                {
+                    "solrField": "appKey",
+                    "solrValue": "yasc"
+                }
+            ],
+            "special": [
+                {
+                    "solrField": "id",
+                    "crawlerField": "URL"
+                },
+                {
+                    "solrField": "host",
+                    "crawlerField": "HOST"
+                },
+                {
+                    "solrField": "url",
+                    "crawlerField": "URL_RELATIVE"
+                }
+            ]
+        },
+        "mappingTika": {
+            "static": [
+                {
+                    "solrField": "type",
+                    "solrValue": "file"
+                },
+                {
+                    "solrField": "appKey",
+                    "solrValue": "yasc"
+                }
+            ],
+            "special": [
+                {
+                    "solrField": "id",
+                    "crawlerField": "URL"
+                },
+                {
+                    "solrField": "host",
+                    "crawlerField": "HOST"
+                },
+                {
+                    "solrField": "url",
+                    "crawlerField": "URL"
+                },
+                {
+                    "solrField": "title",
+                    "crawlerField": "TITLE"
+                },
+                {
+                    "solrField": "content",
+                    "crawlerField": "CONTENT"
+                }
+            ]
+        }
+    }
+}
