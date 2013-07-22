@@ -22,8 +22,8 @@ Configuration
 =============
 
 In "Examples" directory, you have 2 different configuration file:
-	- the complete
-	- the minimal
+	- the complete [https://github.com/Apen/Yasc/blob/master/Examples/config-all.json]
+	- the minimal [https://github.com/Apen/Yasc/blob/master/Examples/config-min.json]
 
 All the parameters are explicit but this is en explanation.
 
