@@ -9,7 +9,7 @@ Installation
 
 1] Download and copy files in a special directory. You must execute the script from the root of Yasc
 
-2] Create a json configuration file of use one form teh "Examples" directory
+2] Create a json configuration file of use one form the "Examples" directory (with your URL to crawl)
 
 3] Execute the script
 ```
