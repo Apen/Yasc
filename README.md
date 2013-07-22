@@ -89,6 +89,15 @@ useragent of the page recuperation
 }
 ```
 
+request / sleep
+-------------
+sleeping time in seconds between request
+```
+"request": {
+    "sleep": 5
+}
+```
+
 solr server
 -------------
 configuration of the solr server

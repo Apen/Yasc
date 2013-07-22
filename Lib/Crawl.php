@@ -75,6 +75,12 @@ class Crawl {
 		$response = $this->request->getContent($url);
 
 		\Yasc\Log::write('---------------------------------------------------------------------------------------------');
+
+		if ($this->config->getRequestSleep() > 0) {
+			\Yasc\Log::write('Sleeping : ' . $this->config->getRequestSleep() . ' seconds');
+			sleep($this->config->getRequestSleep());
+		}
+
 		\Yasc\Log::write('Depth : ' . $depth);
 		\Yasc\Log::write('Links to crawl : ' . $this->nbLinks);
 		\Yasc\Log::write('Current memory : ' . \Yasc\Config::getMemoryUsage());

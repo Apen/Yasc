@@ -151,6 +151,13 @@ class Config {
 	}
 
 	/**
+	 * @return int
+	 */
+	public function getRequestSleep() {
+		return (!empty($this->parameters['request']['sleep'])) ? $this->parameters['request']['sleep'] : 0;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function getRequestAuthentication() {

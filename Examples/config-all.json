@@ -14,7 +14,8 @@
     },
     "request": {
         "timeout": 5,
-        "useragent": "Site-ngo Yasc parser"
+        "useragent": "Site-ngo Yasc parser",
+        "sleep": 5
     },
     "solr": {
         "host": "x.x.x.x",
