@@ -72,6 +72,24 @@ class Config {
 	}
 
 	/**
+	 * Is Match plugin loaded?
+	 *
+	 * @return bool
+	 */
+	public function isMatch() {
+		return (!empty($this->parameters['match'])) ? TRUE : FALSE;
+	}
+
+	/**
+	 * Return match values
+	 *
+	 * @return bool
+	 */
+	public function getMatchValues() {
+		return $this->parameters['match'];
+	}
+
+	/**
 	 * Is tika mapping loaded?
 	 *
 	 * @return bool

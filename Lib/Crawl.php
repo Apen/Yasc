@@ -19,6 +19,14 @@ class Crawl {
 	private $seenUrls;
 
 	/**
+	 * Array with the urls stored by depth
+	 * It is needded to resume an aborted crawling
+	 *
+	 * @var array $allUrls
+	 */
+	private $allUrls;
+
+	/**
 	 * Number of links to parse
 	 *
 	 * @var int $nbLinks
@@ -55,6 +63,9 @@ class Crawl {
 
 		// Solr plugin
 		$this->plugins['solr'] = new \Yasc\Solr($this->config);
+
+		// Match plugin
+		$this->plugins['match'] = new \Yasc\Match($this->config);
 	}
 
 	/**
@@ -62,7 +73,7 @@ class Crawl {
 	 */
 	public function startCrawling() {
 		$this->seenUrls[$this->config->getStartUrl()] = TRUE;
-		$this->crawlPage($this->config->getStartUrl(), $this->config->getDepth());
+		$this->crawlPageIterative($this->config->getStartUrl(), $this->config->getDepth());
 	}
 
 	/**
@@ -74,6 +85,100 @@ class Crawl {
 	protected function crawlPage($url, $depth) {
 		$response = $this->request->getContent($url);
 
+		$this->debugCrawling($url, $depth, $response);
+
+		$this->nbLinks--;
+
+		if ($this->config->isSolr() === TRUE) {
+			$this->plugins['solr']->getSolrFields($url, $response);
+		}
+
+		if ($depth > 0) {
+			$links = $this->getLinks($response['data']);
+			foreach ($links as $newurl) {
+				$this->crawlPage($newurl, $depth - 1);
+			}
+		}
+
+	}
+
+	/**
+	 * Crawl a page and subpages (iterative version)
+	 * Save current crawling status to resume the crawling (very usefull)
+	 *
+	 * @param string $url
+	 * @param int    $depth
+	 */
+	protected function crawlPageIterative($url, $depth) {
+		$this->allUrls[$depth][$url] = '...';
+
+		// load status file if needed
+		if (is_file($this->getStatusJsonFile())) {
+			$status = json_decode(file_get_contents($this->getStatusJsonFile()), TRUE);
+			$this->allUrls = $status[0];
+			$this->nbLinks = $status[1];
+			\Yasc\Log::write('Loading status file : ' . $this->getStatusJsonFile());
+		}
+
+		while ($depth >= 0) {
+			$depth--;
+			$nbLinkForDepth = count($this->allUrls[$depth + 1]);
+			$currentNumUrl = 1;
+			foreach ($this->allUrls[$depth + 1] as $link => $status) {
+				// if the url is not already parsed
+				if ($status == '...') {
+					$this->allUrls[$depth + 1][$link] = 'ok';
+					$response = $this->request->getContent($link);
+
+					$this->nbLinks--;
+
+					$this->debugCrawling($link, $depth + 1, $response);
+					\Yasc\Log::write('% of depth ' . ($depth + 1) . ' : ' . round((($currentNumUrl * 100) / $nbLinkForDepth), 2));
+
+					$this->execPlugins($link, $response);
+
+					if ($depth >= 0) {
+						$newLinks = $this->getLinks($response['data']);
+						foreach ($newLinks as $newLink) {
+							$this->allUrls[$depth][$newLink] = '...';
+						}
+					}
+
+					$this->writeStatusJsonFile();
+				} else {
+					$this->seenUrls[$link] = TRUE;
+				}
+
+				$currentNumUrl++;
+			}
+
+		}
+
+	}
+
+	/**
+	 * Exec all the plugins on the current url
+	 *
+	 * @param string $url
+	 * @param array  $response
+	 */
+	protected function execPlugins($url, $response) {
+		if ($this->config->isSolr() === TRUE) {
+			$this->plugins['solr']->getSolrFields($url, $response);
+		}
+		if ($this->config->isMatch() === TRUE) {
+			$this->plugins['match']->matchValues($url, $response);
+		}
+	}
+
+	/**
+	 * Debug a url crawling
+	 *
+	 * @param string $url
+	 * @param int    $depth
+	 * @param array  $response
+	 */
+	protected function debugCrawling($url, $depth, $response) {
 		\Yasc\Log::write('---------------------------------------------------------------------------------------------');
 
 		if ($this->config->getRequestSleep() > 0) {
@@ -86,22 +191,6 @@ class Crawl {
 		\Yasc\Log::write('Current memory : ' . \Yasc\Config::getMemoryUsage());
 		\Yasc\Log::write('Current URL : ' . substr($url, 0, 200));
 		\Yasc\Log::write('Response : content_type=' . $response['infos']['content_type'] . ' / http_code=' . $response['infos']['http_code'] . ' / parsed=' . $response['infos']['parsed'] . 's');
-
-		$this->nbLinks--;
-
-		$response = $this->request->getContent($url);
-		if ($this->config->isSolr() === TRUE) {
-			$this->plugins['solr']->getSolrFields($url, $response);
-		}
-
-		if ($depth > 0) {
-			$links = $this->getLinks($response['data']);
-			$this->nbLinks = $this->nbLinks + count($links);
-			foreach ($links as $newurl) {
-				$this->crawlPage($newurl, $depth - 1);
-			}
-		}
-
 	}
 
 	/**
@@ -223,7 +312,56 @@ class Crawl {
 				//\Yasc\Log::write('Link disallow : ' . substr($url, 0, 200));
 			}
 		}
+		$this->nbLinks = $this->nbLinks + count($ret);
 		return $ret;
+	}
+
+	/**
+	 * Write crawling logs
+	 */
+	public function writeLinks() {
+		$urls = $this->getSeenUrls();
+
+		// write txt file
+		@unlink($this->getLinksTxtFile());
+		$handle = fopen($this->getLinksTxtFile(), 'a');
+		if (!$handle) {
+			die("Can't open file " . $this->getLinksTxtFile());
+		}
+		foreach ($urls as $url) {
+			fwrite($handle, $url . PHP_EOL);
+		}
+		fclose($handle);
+	}
+
+	/**
+	 * Write crawling status
+	 */
+	protected function writeStatusJsonFile() {
+		$handle = fopen($this->getStatusJsonFile(), 'w');
+		if (!$handle) {
+			die("Can't open file " . $this->getLinksJsonFile());
+		}
+		fwrite($handle, json_encode(array($this->allUrls, $this->nbLinks)));
+		fclose($handle);
+	}
+
+	/**
+	 * Get links txt file
+	 *
+	 * @return string
+	 */
+	protected function getLinksTxtFile() {
+		return realpath(__DIR__ . '/../Crawl') . '/links.txt';
+	}
+
+	/**
+	 * Get links json status file
+	 *
+	 * @return string
+	 */
+	protected function getStatusJsonFile() {
+		return realpath(__DIR__ . '/../Crawl') . '/status.json';
 	}
 
 	/**
