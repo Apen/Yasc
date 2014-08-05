@@ -28,7 +28,6 @@ class Match {
 	 */
 	public function matchValues($url, $response) {
 		$matchValues = $this->config->getMatchValues();
-		//\Yasc\Log::write($matchValues);
 		foreach ($matchValues as $matchValue) {
 			if (preg_match_all('#' . $matchValue . '#', $response['data'], $matches) > 0) {
 				$this->writeMatchValues($matchValue, $url);
@@ -36,6 +35,12 @@ class Match {
 		}
 	}
 
+	/**
+	 * Write match url in file
+	 *
+	 * @param $matchValue
+	 * @param $url
+	 */
 	protected function writeMatchValues($matchValue, $url) {
 		// write txt file
 		$handle = fopen($this->getMatchValuesTxtFile(), 'a');

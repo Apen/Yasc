@@ -38,7 +38,7 @@ class Request {
 		$response = array();
 		$response['data'] = curl_exec($ch);
 		if ($response['data'] === FALSE) {
-			\Yasc\Log::writeAndDie(curl_error($ch));
+			Log::writeAndDie(curl_error($ch));
 		}
 		$response['infos'] = curl_getinfo($ch);
 		$response['infos']['parsed'] = round((microtime(TRUE) - $begin), 2);

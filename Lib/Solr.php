@@ -30,10 +30,10 @@ class Solr {
 		if ($this->config->isSolr() === TRUE) {
 			$this->solr = new Apache_Solr_Service($this->config->getSolrHost(), $this->config->getSolrPort(), $this->config->getSolrPath());
 			if ($this->solr->ping()) {
-				\Yasc\Log::write('Solr service responding [' . $this->config->getSolrHost() . ':' . $this->config->getSolrPort() . $this->config->getSolrPath() . ']');
+				Log::write('Solr service responding [' . $this->config->getSolrHost() . ':' . $this->config->getSolrPort() . $this->config->getSolrPath() . ']');
 				//$this->solr->deleteByQuery('appKey:yasc');
 			} else {
-				\Yasc\Log::writeAndDie('Solr service not responding');
+				Log::writeAndDie('Solr service not responding');
 			}
 		}
 	}
@@ -72,10 +72,10 @@ class Solr {
 					}
 				}
 				try {
-					\Yasc\Log::write('Solr : sending doc [' . substr($solrFields['title'] . ']', 0, 200));
+					Log::write('Solr : sending doc [' . substr($solrFields['title'] . ']', 0, 200));
 					$solrResponse = $this->solr->addDocument($doc);
 					$parsed = round(((microtime(TRUE) - $begin) * 1000));
-					\Yasc\Log::write('Solr response : ' . $solrResponse->getHttpStatus() . ' ' . $solrResponse->getHttpStatusMessage() . ' / parsed=' . $parsed . 'ms');
+					Log::write('Solr response : ' . $solrResponse->getHttpStatus() . ' ' . $solrResponse->getHttpStatusMessage() . ' / parsed=' . $parsed . 'ms');
 					//\Yasc\Log::write($doc);
 					$this->solr->commit();
 					$this->solr->optimize();
@@ -92,6 +92,7 @@ class Solr {
 	 *
 	 * @param string $url
 	 * @param array  $response
+	 * @return array
 	 */
 	public function solrIndexPage($url, $response) {
 		$solrFields = array();
@@ -137,6 +138,7 @@ class Solr {
 	 *
 	 * @param string $url
 	 * @param array  $response
+	 * @return array
 	 */
 	public function solrIndexFile($url, $response) {
 		$solrFields = array();

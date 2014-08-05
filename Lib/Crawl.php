@@ -56,16 +56,16 @@ class Crawl {
 		$this->nbLinks = 1;
 
 		// init configuration via json
-		$this->config = new \Yasc\Config($GLOBALS['argv'][1]);
+		$this->config = new Config($GLOBALS['argv'][1]);
 
 		// request object
-		$this->request = new \Yasc\Request($this->config);
+		$this->request = new Request($this->config);
 
 		// Solr plugin
-		$this->plugins['solr'] = new \Yasc\Solr($this->config);
+		$this->plugins['solr'] = new Solr($this->config);
 
 		// Match plugin
-		$this->plugins['match'] = new \Yasc\Match($this->config);
+		$this->plugins['match'] = new Match($this->config);
 	}
 
 	/**
@@ -117,7 +117,7 @@ class Crawl {
 			$status = json_decode(file_get_contents($this->getStatusJsonFile()), TRUE);
 			$this->allUrls = $status[0];
 			$this->nbLinks = $status[1];
-			\Yasc\Log::write('Loading status file : ' . $this->getStatusJsonFile());
+			Log::write('Loading status file : ' . $this->getStatusJsonFile());
 		}
 
 		while ($depth >= 0) {
@@ -133,7 +133,7 @@ class Crawl {
 					$this->nbLinks--;
 
 					$this->debugCrawling($link, $depth + 1, $response);
-					\Yasc\Log::write('% of depth ' . ($depth + 1) . ' : ' . round((($currentNumUrl * 100) / $nbLinkForDepth), 2));
+					Log::write('% of depth ' . ($depth + 1) . ' : ' . round((($currentNumUrl * 100) / $nbLinkForDepth), 2));
 
 					$this->execPlugins($link, $response);
 
@@ -179,18 +179,18 @@ class Crawl {
 	 * @param array  $response
 	 */
 	protected function debugCrawling($url, $depth, $response) {
-		\Yasc\Log::write('---------------------------------------------------------------------------------------------');
+		Log::write('---------------------------------------------------------------------------------------------');
 
 		if ($this->config->getRequestSleep() > 0) {
-			\Yasc\Log::write('Sleeping : ' . $this->config->getRequestSleep() . ' seconds');
+			Log::write('Sleeping : ' . $this->config->getRequestSleep() . ' seconds');
 			sleep($this->config->getRequestSleep());
 		}
 
-		\Yasc\Log::write('Depth : ' . $depth);
-		\Yasc\Log::write('Links to crawl : ' . $this->nbLinks);
-		\Yasc\Log::write('Current memory : ' . \Yasc\Config::getMemoryUsage());
-		\Yasc\Log::write('Current URL : ' . substr($url, 0, 200));
-		\Yasc\Log::write('Response : content_type=' . $response['infos']['content_type'] . ' / http_code=' . $response['infos']['http_code'] . ' / parsed=' . $response['infos']['parsed'] . 's');
+		Log::write('Depth : ' . $depth);
+		Log::write('Links to crawl : ' . $this->nbLinks);
+		Log::write('Current memory : ' . Config::getMemoryUsage());
+		Log::write('Current URL : ' . substr($url, 0, 200));
+		Log::write('Response : content_type=' . $response['infos']['content_type'] . ' / http_code=' . $response['infos']['http_code'] . ' / parsed=' . $response['infos']['parsed'] . 's');
 	}
 
 	/**

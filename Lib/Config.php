@@ -19,11 +19,11 @@ class Config {
 	 */
 	public function __construct($configFile) {
 		if (!is_file($configFile)) {
-			\Yasc\Log::writeAndDie("File '$configFile' doesn't exist");
+			Log::writeAndDie("File '$configFile' doesn't exist");
 		}
 		$this->parameters = json_decode(file_get_contents($configFile), TRUE);
 		if (empty($this->parameters)) {
-			\Yasc\Log::writeAndDie("No configuration file loaded");
+			Log::writeAndDie("No configuration file loaded");
 		}
 	}
 
@@ -199,10 +199,11 @@ class Config {
 	/**
 	 * @return string
 	 */
-	public function getMemoryUsage() {
+	public static function getMemoryUsage() {
 		$mem = (integer)((memory_get_usage() + 512) / 1024);
 		$unit = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
-		return round($mem / pow(1024, ($i = floor(log($mem, 1024)))), 2) . $unit[$i];
+		$i = floor(log($mem, 1024));
+		return round($mem / pow(1024, $i), 2) . $unit[$i];
 	}
 
 }
