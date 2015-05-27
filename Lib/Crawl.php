@@ -55,17 +55,17 @@ class Crawl {
 		$this->seenUrls = array();
 		$this->nbLinks = 1;
 
-		// init configuration via json
-		$this->config = new Config($GLOBALS['argv'][1]);
+        // init configuration via json
+        $this->config = new \Yasc\Config($GLOBALS['argv'][1]);
 
-		// request object
-		$this->request = new Request($this->config);
+        // request object
+		$this->request = new \Yasc\Request($this->config);
 
 		// Solr plugin
-		$this->plugins['solr'] = new Solr($this->config);
+		$this->plugins['solr'] = new \Yasc\Solr($this->config);
 
 		// Match plugin
-		$this->plugins['match'] = new Match($this->config);
+		$this->plugins['match'] = new \Yasc\Match($this->config);
 	}
 
 	/**
@@ -112,12 +112,20 @@ class Crawl {
 	protected function crawlPageIterative($url, $depth) {
 		$this->allUrls[$depth][$url] = '...';
 
+        // flush status
+        if ($this->config->isFlush() === TRUE) {
+            if (is_file($this->getStatusJsonFile())) {
+                \Yasc\Log::write('Flushing status file : ' . $this->getStatusJsonFile());
+                @unlink($this->getStatusJsonFile());
+            }
+        }
+
 		// load status file if needed
 		if (is_file($this->getStatusJsonFile())) {
 			$status = json_decode(file_get_contents($this->getStatusJsonFile()), TRUE);
 			$this->allUrls = $status[0];
 			$this->nbLinks = $status[1];
-			Log::write('Loading status file : ' . $this->getStatusJsonFile());
+			\Yasc\Log::write('Loading status file : ' . $this->getStatusJsonFile());
 		}
 
 		while ($depth >= 0) {
@@ -133,7 +141,7 @@ class Crawl {
 					$this->nbLinks--;
 
 					$this->debugCrawling($link, $depth + 1, $response);
-					Log::write('% of depth ' . ($depth + 1) . ' : ' . round((($currentNumUrl * 100) / $nbLinkForDepth), 2));
+					\Yasc\Log::write('% of depth ' . ($depth + 1) . ' : ' . round((($currentNumUrl * 100) / $nbLinkForDepth), 2));
 
 					$this->execPlugins($link, $response);
 
@@ -179,18 +187,18 @@ class Crawl {
 	 * @param array  $response
 	 */
 	protected function debugCrawling($url, $depth, $response) {
-		Log::write('---------------------------------------------------------------------------------------------');
+		\Yasc\Log::write('---------------------------------------------------------------------------------------------');
 
 		if ($this->config->getRequestSleep() > 0) {
-			Log::write('Sleeping : ' . $this->config->getRequestSleep() . ' seconds');
+			\Yasc\Log::write('Sleeping : ' . $this->config->getRequestSleep() . ' seconds');
 			sleep($this->config->getRequestSleep());
 		}
 
-		Log::write('Depth : ' . $depth);
-		Log::write('Links to crawl : ' . $this->nbLinks);
-		Log::write('Current memory : ' . Config::getMemoryUsage());
-		Log::write('Current URL : ' . substr($url, 0, 200));
-		Log::write('Response : content_type=' . $response['infos']['content_type'] . ' / http_code=' . $response['infos']['http_code'] . ' / parsed=' . $response['infos']['parsed'] . 's');
+		\Yasc\Log::write('Depth : ' . $depth);
+		\Yasc\Log::write('Links to crawl : ' . $this->nbLinks);
+		\Yasc\Log::write('Current memory : ' . \Yasc\Config::getMemoryUsage());
+		\Yasc\Log::write('Current URL : ' . substr($url, 0, 200));
+		\Yasc\Log::write('Response : content_type=' . $response['infos']['content_type'] . ' / http_code=' . $response['infos']['http_code'] . ' / parsed=' . $response['infos']['parsed'] . 's');
 	}
 
 	/**
@@ -322,8 +330,14 @@ class Crawl {
 	public function writeLinks() {
 		$urls = $this->getSeenUrls();
 
+        if ($this->config->isFlush() === TRUE) {
+            if (is_file($this->getLinksTxtFile())) {
+                \Yasc\Log::write('Flushing links file : ' . $this->getLinksTxtFile());
+                @unlink($this->getLinksTxtFile());
+            }
+        }
+
 		// write txt file
-		@unlink($this->getLinksTxtFile());
 		$handle = fopen($this->getLinksTxtFile(), 'a');
 		if (!$handle) {
 			die("Can't open file " . $this->getLinksTxtFile());

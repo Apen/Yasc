@@ -38,10 +38,10 @@ class Request {
 		$response = array();
 		$response['data'] = curl_exec($ch);
 		if ($response['data'] === FALSE) {
-			Log::writeAndDie(curl_error($ch));
+			\Yasc\Log::writeAndDie(curl_error($ch));
 		}
 		$response['infos'] = curl_getinfo($ch);
-		$response['infos']['parsed'] = round((microtime(TRUE) - $begin), 2);
+		$response['infos']['parsed'] = round((microtime(TRUE) - $begin), 3);
 		curl_close($ch);
 		return $response;
 	}

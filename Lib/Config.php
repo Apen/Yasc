@@ -18,13 +18,27 @@ class Config {
 	 * @param string $configFile Path to config file
 	 */
 	public function __construct($configFile) {
+        // support for command line options
+        $options = getopt('',array('config:','flush'));
+
+        if (!empty($options['config'])) {
+            $configFile = $options['config'];
+        }
+
 		if (!is_file($configFile)) {
-			Log::writeAndDie("File '$configFile' doesn't exist");
+			\Yasc\Log::writeAndDie("File '$configFile' doesn't exist");
 		}
+
+        // load configuration file
 		$this->parameters = json_decode(file_get_contents($configFile), TRUE);
 		if (empty($this->parameters)) {
-			Log::writeAndDie("No configuration file loaded");
+			\Yasc\Log::writeAndDie("No configuration file loaded");
 		}
+
+        // other options process
+        if (isset($options['flush'])) {
+            $this->parameters['flush'] = TRUE;
+        }
 	}
 
 	/**
@@ -196,14 +210,20 @@ class Config {
 		return (!empty($this->parameters['solr']['javaPath'])) ? $this->parameters['solr']['javaPath'] : 'java';
 	}
 
+    /**
+     * @return string
+     */
+    public function isFlush() {
+        return (!empty($this->parameters['flush'])) ? TRUE : FALSE;
+    }
+
 	/**
 	 * @return string
 	 */
 	public static function getMemoryUsage() {
 		$mem = (integer)((memory_get_usage() + 512) / 1024);
 		$unit = array('b', 'kb', 'mb', 'gb', 'tb', 'pb');
-		$i = floor(log($mem, 1024));
-		return round($mem / pow(1024, $i), 2) . $unit[$i];
+		return round($mem / pow(1024, ($i = floor(log($mem, 1024)))), 2) . $unit[$i];
 	}
 
 }

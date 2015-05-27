@@ -19,8 +19,15 @@ Installation
 2] Create a json configuration file of use one form the "Examples" directory (with your URL to crawl)
 
 3] Execute the script
+
 ```
 php Yasc.php "Examples/config-all.json"
+```
+
+OR
+
+```
+php Yasc.php  --config="Examples/config-all.json"
 ```
 
 4] Enjoy
@@ -32,7 +39,9 @@ In "Examples" directory, you have 2 different configuration file:
 	- the complete [https://github.com/Apen/Yasc/blob/master/Examples/config-all.json]
 	- the minimal [https://github.com/Apen/Yasc/blob/master/Examples/config-min.json]
 
-All the parameters are explicit but this is en explanation.
+All the parameters are explicit but here is an explanation.
+
+Note: the crawler support a resume system to continue crawling. If you want to flush the history add "--flush" in the command line
 
 startUrl
 -------------
@@ -103,6 +112,16 @@ sleeping time in seconds between request
 "request": {
     "sleep": 5
 }
+```
+
+match
+-------------
+array of regexp string to match on each crawled pages. The result will be saved in a match.txt file
+```
+"match": [
+    "Opens external link in new window",
+    "<p>&nbsp;</p>"
+]
 ```
 
 solr server
