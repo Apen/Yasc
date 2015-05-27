@@ -14,9 +14,9 @@ Requirements
 Installation
 =============
 
-1. Download and copy files in a special directory. You must execute the script from the root of Yasc
-2. Create a json configuration file of use one form the "Examples" directory (with your URL to crawl)
-3. Execute the script
+* Download and copy files in a special directory. You must execute the script from the root of Yasc
+* Create a json configuration file of use one form the "Examples" directory (with your URL to crawl)
+* Execute the script
 
 ```
 php Yasc.php "Examples/config-all.json"
@@ -28,7 +28,7 @@ OR
 php Yasc.php  --config="Examples/config-all.json"
 ```
 
-4. Enjoy
+* Enjoy
 
 Configuration
 =============
