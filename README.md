@@ -14,11 +14,9 @@ Requirements
 Installation
 =============
 
-1] Download and copy files in a special directory. You must execute the script from the root of Yasc
-
-2] Create a json configuration file of use one form the "Examples" directory (with your URL to crawl)
-
-3] Execute the script
+1. Download and copy files in a special directory. You must execute the script from the root of Yasc
+2. Create a json configuration file of use one form the "Examples" directory (with your URL to crawl)
+3. Execute the script
 
 ```
 php Yasc.php "Examples/config-all.json"
@@ -30,18 +28,18 @@ OR
 php Yasc.php  --config="Examples/config-all.json"
 ```
 
-4] Enjoy
+4. Enjoy
 
 Configuration
 =============
 
 In "Examples" directory, you have 2 different configuration file:
-	- the complete [https://github.com/Apen/Yasc/blob/master/Examples/config-all.json]
-	- the minimal [https://github.com/Apen/Yasc/blob/master/Examples/config-min.json]
+* the complete [https://github.com/Apen/Yasc/blob/master/Examples/config-all.json]
+* the minimal [https://github.com/Apen/Yasc/blob/master/Examples/config-min.json]
 
 All the parameters are explicit but here is an explanation.
 
-Note: the crawler support a resume system to continue crawling. If you want to flush the history add "--flush" in the command line
+**Note**: the crawler support a resume system to continue crawling. If you want to flush the history add "--flush" in the command line
 
 startUrl
 -------------
