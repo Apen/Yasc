@@ -57,7 +57,7 @@ class Match {
 	 *
 	 * @return string
 	 */
-	protected function getMatchValuesTxtFile() {
+	public function getMatchValuesTxtFile() {
 		return realpath(__DIR__ . '/../Crawl') . '/match.txt';
 	}
 
