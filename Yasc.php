@@ -3,7 +3,7 @@
 // example of execution
 // php Yasc.php config.json
 
-$begin = microtime(TRUE);
+$begin = microtime(true);
 
 // load class
 require_once('Lib/Config.php');
@@ -26,6 +26,6 @@ $crawler->writeLinks();
 \Yasc\Log::write('Links parsed');
 \Yasc\Log::write(count($crawler->getSeenUrls()));
 \Yasc\Log::write('---------------------------------------------------------------------------------------------');
-\Yasc\Log::write('Parsed in ' . round((microtime(TRUE) - $begin), 2) . 's');
+\Yasc\Log::write('Parsed in ' . round((microtime(true) - $begin), 2) . 's');
 \Yasc\Log::write('---------------------------------------------------------------------------------------------');
 
