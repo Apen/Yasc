@@ -218,6 +218,14 @@ class Config
     {
         return (!empty($this->parameters['request']['authentication'])) ? $this->parameters['request']['authentication'] : null;
     }
+	
+	    /**
+     * @return string
+     */
+    public function getRequestHeaders()
+    {
+        return (!empty($this->parameters['request']['headers'])) ? $this->parameters['request']['headers'] : null;
+    }
 
     /**
      * @return string

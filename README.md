@@ -112,6 +112,17 @@ sleeping time in seconds between request
 }
 ```
 
+request / headers
+-------------
+list of headers params to send
+```
+"headers": [
+	"xxxk: 1",
+	"Cache-Control: no-cache, must-revalidate",
+	"Pragma: no-cache, must-revalidate"
+]
+```
+
 match
 -------------
 array of regexp string to match on each crawled pages. The result will be saved in a match.txt file
